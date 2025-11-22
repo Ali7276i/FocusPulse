@@ -1,0 +1,111 @@
+<!-- Component Wrapper for positioning context -->
+<div class="relative min-h-screen bg-[#1C202B] text-white antialiased">
+
+  <!-- Project Icon -->
+  <div class="top-icon-container">
+      <img id="projectIcon" src="assets/images/project_icon.png" alt="Project Icon">
+  </div>
+
+  <!-- Language Switcher -->
+  <div class="absolute top-4 right-4 md:top-6 md:right-6 z-20">
+      <button (click)="toggleLanguage()" 
+              aria-label="Toggle Language"
+              class="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-slate-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m4.25 16l-4.25-4.25M19.5 19.5l-4.25-4.25M12 21a9 9 0 100-18 9 9 0 000 18z" />
+          </svg>
+      </button>
+    </div>
+
+    <main class="flex flex-col items-center justify-center min-h-screen p-4 pb-24">
+    
+    <div class="w-full max-w-md mx-auto flex flex-col items-center">
+      <!-- Header -->
+      <header class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2 text-slate-100">{{ t().title }}</h1>
+        <p class="text-slate-400">{{ t().subtitle }}</p>
+      </header>
+
+      <!-- Timer Mode Buttons -->
+      <div class="flex items-center justify-center bg-[#252A38] rounded-full p-1.5 mb-10 shadow-lg">
+        <button (click)="setTimerMode('pomodoro')" 
+                [class]="timerMode() === 'pomodoro' ? activeModeBgClass() : 'text-slate-300 hover:bg-slate-700/50'"
+                class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300">
+          {{ t().pomodoro }}
+        </button>
+        <button (click)="setTimerMode('shortBreak')" 
+                [class]="timerMode() === 'shortBreak' ? activeModeBgClass() : 'text-slate-300 hover:bg-slate-700/50'"
+                class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300">
+          {{ t().shortBreak }}
+        </button>
+        <button (click)="setTimerMode('longBreak')" 
+                [class]="timerMode() === 'longBreak' ? activeModeBgClass() : 'text-slate-300 hover:bg-slate-700/50'"
+                class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300">
+          {{ t().longBreak }}
+        </button>
+      </div>
+
+      <!-- Timer Display -->
+      <div class="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center bg-gradient-to-br from-[#252A38] to-[#1c202b] rounded-full shadow-2xl shadow-black/30">
+        <div class="absolute inset-0 bg-[#1C202B] rounded-full m-3 shadow-[inset_0_8px_32px_rgba(0,0,0,0.5)]"></div>
+
+        <!-- Clock face markers -->
+        <div class="absolute w-full h-full">
+            @for (marker of hourMarkers; track marker) {
+                <div class="absolute left-1/2 -ml-px h-full w-px" [style.transform]="'rotate(' + marker * 30 + 'deg)'">
+                    <div class="bg-slate-700 w-px h-4 absolute top-3"></div>
+                </div>
+            }
+        </div>
+
+        <!-- Hands -->
+        <div class="absolute w-full h-full flex justify-center items-center z-10">
+            <!-- Progress Hand -->
+            <div [class]="'absolute bottom-1/2 w-1.5 h-20 md:h-24 rounded-t-full origin-bottom transition-transform duration-1000 ease-linear ' + activeHandBgClass()"
+                [style.transform]="'rotate(' + progressHandAngle() + 'deg)'">
+            </div>
+            <!-- Second Hand -->
+            <div class="absolute bottom-1/2 w-0.5 h-28 md:h-36 bg-slate-300/70 rounded-full origin-bottom transition-transform duration-1000 ease-linear"
+                [style.transform]="'rotate(' + secondHandAngle() + 'deg)'">
+            </div>
+        </div>
+
+        <!-- Hub -->
+        <div [class]="'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-slate-900 z-20 ' + activeHandBgClass()"></div>
+
+        <!-- Time Text -->
+        <div class="relative z-30 flex flex-col items-center">
+            <span class="font-mono text-6xl md:text-7xl font-bold tracking-wider text-slate-100 drop-shadow-lg">{{ displayTime() }}</span>
+        </div>
+      </div>
+
+
+      <!-- Control Buttons -->
+      <div class="flex items-center space-x-6 mt-10">
+        <button (click)="toggleTimer()"
+                [class]="activeBgClass()"
+                class="px-12 py-4 rounded-full text-xl font-bold uppercase tracking-wider text-white transition-all duration-300 hover:scale-105 shadow-lg">
+          @if (isRunning()) {
+            <span>{{ t().pause }}</span>
+          } @else {
+            <span>{{ t().start }}</span>
+          }
+        </button>
+        <button (click)="resetTimer()" [attr.aria-label]="t().ariaReset" class="p-4 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5m11 2v-5h-5M4 4a9 9 0 0115.55 5.55m1.45 2.9A9 9 0 014 20" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Anchor Ad Container -->
+  <div class="ad-container">
+      <!-- AD_PLACEHOLDER -->
+      <div class="ad-placeholder">
+          <p>Ad Placeholder — Replace with real ad code</p>
+      </div>
+  </div>
+
+</div>

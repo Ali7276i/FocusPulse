@@ -1,0 +1,5 @@
+{
+  "name": "Visual Pomodoro Timer",
+  "description": "A clean and modern Pomodoro timer to help you focus, featuring a visual circular progress animation, customizable timers for work and breaks, and sound notifications. It saves your last used timer mode for convenience.",
+  "requestFramePermissions": []
+}
